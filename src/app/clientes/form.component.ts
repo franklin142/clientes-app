@@ -29,7 +29,7 @@ export class FormComponent implements OnInit {
     this.clienteService.create(this.cliente).subscribe(
          response => {
            this.router.navigate(['/clientes']);
-           Swal.fire('Operación realizada',`El cliente ${response.nombre} ha sido registrado exitosamente. `,'success');
+           Swal.fire('Operación realizada',`El cliente ${response.cliente.nombre} ha sido registrado exitosamente. `,'success');
        }
 
     );

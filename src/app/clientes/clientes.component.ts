@@ -33,10 +33,10 @@ export class ClientesComponent implements OnInit {
     }).then(r =>{
       if(r.isConfirmed){
         this.clienteService.delete(cliente.id).subscribe(
-            clientes => {
+            response => {
             //  this.router.navigate(['/clientes']);
               this.clientes = this.clientes.filter(a=>a!=cliente);
-              swal.fire('Operación realizada','Cliente eliminado correctamente','success');
+              swal.fire('Operación realizada',`Cliente ${cliente.nombre} eliminado correctamente`,'success');
             }
         );
       }
