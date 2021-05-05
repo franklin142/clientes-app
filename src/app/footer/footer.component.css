@@ -1,0 +1,12 @@
+.footer{
+  /*margin-top: 16rem;*/
+  bottom: 0px;
+  width: 100%;
+  min-height: 100px;
+  position: absolute;
+}
+.author-text{
+  margin-bottom: 3px;
+  bottom: 10px;
+  text-align: center;
+}

@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+html{
+    position: relative;/*Esta posicion lo que hace es organizar los elementos que tenga definido position: absolute dentro de el*/
+    min-height: 100%;
+  }
+  body{
+    margin-bottom: 180px;/*hace que el body tenga la separacion del footer para que no se metan los registros por debajo de el*/
+  }
+  

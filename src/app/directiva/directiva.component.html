@@ -1,0 +1,16 @@
+<button type="button"
+        name="button"
+        class="btn btn-primary mcdy-3"
+        (click)="togglePanel()">
+        {{ habilitar ? 'Ocultar' : 'Mostrar' }}
+</button>
+<div class="card">
+  <div class="card-header">
+    <h2>listado de cursos</h2>
+  </div>
+  <div class="card-body">
+    <ul class="list-group" *ngIf="habilitar">
+      <li class='list-group-item' *ngFor="let curso of listaCurso"> {{curso}}</li>
+    </ul>
+  </div>
+</div>

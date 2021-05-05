@@ -1,0 +1,18 @@
+Generar el proyecto
+ng new clientes-app 
+seleccionar yes en tslint y no en app routing ya que se generará posterior manualmente
+
+Eliminamos el contenido de app.component.html para colocal el nuestro
+
+Nota: El <app-root></app-root> es la puerta para poder anidar mas componentes que se deseen mostrar dentro de la app
+Todos los componentes deberian pasar primero por el app.component para poder ser visualizados
+<html>
+
+  | app-root (Componente app.component)
+  -- app-header
+   | router-outlet 
+   | app-footer
+   
+</html>
+
+

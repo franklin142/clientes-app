@@ -1,0 +1,45 @@
+import {Cliente} from './cliente';
+export const CLIENTES : Cliente[] = [
+  {
+    id:1,
+    nombre:'Franklin',
+    apellido:'Flores',
+    email:'franklingranados142@gmail.com',
+    createdAt:'2021-04-13'
+  },
+  {
+    id:2,
+    nombre:'Alberto',
+    apellido:'granados',
+    email:'albertoflores241@gmail.com',
+    createdAt:'2021-04-13'
+  },
+  {
+    id:1,
+    nombre:'Franklin',
+    apellido:'Flores',
+    email:'franklingranados142@gmail.com',
+    createdAt:'2021-04-13'
+  },
+  {
+    id:2,
+    nombre:'Alberto',
+    apellido:'granados',
+    email:'albertoflores241@gmail.com',
+    createdAt:'2021-04-13'
+  },
+  {
+    id:1,
+    nombre:'Franklin',
+    apellido:'Flores',
+    email:'franklingranados142@gmail.com',
+    createdAt:'2021-04-13'
+  },
+  {
+    id:2,
+    nombre:'Alberto',
+    apellido:'granados',
+    email:'albertoflores241@gmail.com',
+    createdAt:'2021-04-13'
+  }
+];
