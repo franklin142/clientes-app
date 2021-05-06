@@ -1,30 +1,110 @@
+<!--errores? sirve para preguntar si existe la instancia o el objeto-->
+<ul class="alert alert-danger" *ngIf="errors && errors.length>0"> 
+  <li *ngFor="let error of errors">
+    {{error}}
+  </li>
+</ul>
 <div class="text-white card bg-dark my-2">
   <div class="card-header"><h2>{{titluloForm}}</h2></div>
   <div class="card-body">
-    <form >
+    <form #clienteForm="ngForm">
       <div class="form-group row ">
         <label for="nombre" class="col-sm-12 col-form-label">Nombre</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" value="">
+          <input type="text" class="form-control" 
+          [(ngModel)]="cliente.nombre" 
+          name="nombre" value=""
+          #nombre="ngModel"
+          >
+          <!--
+            required 
+          minlength="4" 
+          maxlength="50"
+        -->
+          <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.touched || nombre.dirty)">
+            <!--Aqui van todos los mensajes de validacion. para este ejemplo se toma el campo #nombre 
+                el cual es evaluado mediante ngif para su validacion.
+                Se muestra la validacion en los dos contextos los cuales son nombre.touched y nombre.dirty
+                dirty: a medida que escribimos muestra el error
+                touches: cuando salimos o entramos al campo
+            -->
+            <div *ngIf="nombre.errors && nombre.errors.required">
+              El nombre del cliente es requerido
+            </div>
+            <div *ngIf="nombre.errors && nombre.errors.minlength">
+              El nombre debe tener al menos 4 caracteres
+            </div>
+            <div *ngIf="nombre.errors && nombre.errors.maxlength">
+              El nombre debe tener un maximo de 50 caracteres
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-group row ">
         <label for="apellido" class="col-sm-12 col-form-label">Apellido</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" [(ngModel)]="cliente.apellido"name="apellido" value="">
+          <input type="text" class="form-control" 
+          [(ngModel)]="cliente.apellido"
+          name="apellido" value=""
+          #apellido="ngModel"
+          required 
+          minlength="4" 
+          maxlength="50">
+          <div class="alert alert-danger" *ngIf="apellido.invalid && (apellido.touched || apellido.dirty)">
+            <!--Aqui van todos los mensajes de validacion. para este ejemplo se toma el campo #apellido 
+                el cual es evaluado mediante ngif para su validacion.
+                Se muestra la validacion en los dos contextos los cuales son nombre.touched y nombre.dirty
+                dirty: a medida que escribimos muestra el error
+                touches: cuando salimos o entramos al campo
+            -->
+            <div *ngIf="apellido.errors && apellido.errors.required">
+              El apellido del cliente es requerido
+            </div>
+            <div *ngIf="apellido.errors && apellido.errors.minlength">
+              El apellido debe tener al menos 4 caracteres
+            </div>
+            <div *ngIf="apellido.errors && apellido.errors.maxlength">
+              El apellido debe tener un maximo de 50 caracteres
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-group row ">
         <label for="email" class="col-sm-12 col-form-label">Email</label>
         <div class="col-sm-6">
-          <input type="email" class="form-control" [(ngModel)]="cliente.email" name="email" value="">
+          <input type="email" class="form-control" 
+          [(ngModel)]="cliente.email" 
+          name="email" value=""
+          #email="ngModel"
+          email
+          required>
+          <div class="alert alert-danger" *ngIf="email.invalid && (email.touched || email.dirty)">
+            <!--Aqui van todos los mensajes de validacion. para este ejemplo se toma el campo #email 
+                el cual es evaluado mediante ngif para su validacion.
+                #email="ngModel" convierte el input en un campo manejado
+                por angular para poder ser validado como tal.
+                Se muestra la validacion en los dos contextos los cuales son email.touched y email.dirty
+                dirty: a medida que escribimos muestra el error
+                touches: cuando salimos o entramos al campo
+            -->
+            <div *ngIf="email.errors && email.errors.required">
+              El email del cliente es requerido
+            </div>
+            <div *ngIf="email.errors && email.errors.email">
+              El email no tiene un formato valido
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-group row ">
         <div class="col-sm-6">
-          <button type="submit" name="button" class="btn btn-primary" (click)="create()" *ngIf="!cliente.id else updateButtonBlock">Crear</button>
+          <button type="submit" name="button" class="btn btn-primary" 
+          (click)="create()" *ngIf="!cliente.id else updateButtonBlock"
+          [disabled]="clienteForm.invalid">Crear</button>
           <ng-template #updateButtonBlock>
-            <button type="submit" name="button" class="btn btn-primary" (click)="update()">Actualizar</button>
+            <button type="submit" name="button" 
+            class="btn btn-primary" (click)="update()"
+            [disabled]="clienteForm.invalid">Actualizar</button>
           </ng-template>
         </div>
       </div>

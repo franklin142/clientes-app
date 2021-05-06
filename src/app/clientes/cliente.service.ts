@@ -1,17 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Cliente } from './cliente';
-//import {CLIENTES} from './clientes.json';//importa el json estatico escrito en typescript
-import { Observable, throwError } from 'rxjs';//permite manejar pedidos asincronos al api rest o procesos que tarden tiempo
-//import { of} from 'rxjs/observable/of';// es quien permite extraer el resultado de la peticion una vez termine
-import { HttpClient, HttpHeaders } from '@angular/common/http'; // permite conectarse a las api rest
-import { map, catchError } from 'rxjs/operators';// permite mapear una respuesta de API Rest al tipo de dato que se necesita del lado del cliente
+//importa el json estatico escrito en typescript
+//import {CLIENTES} from './clientes.json';
+//permite manejar pedidos asincronos al api rest o procesos que tarden tiempo
+import { Observable, throwError } from 'rxjs';
+// es quien permite extraer el resultado de la peticion una vez termine
+//import { of} from 'rxjs/observable/of';
+// permite conectarse a las api rest
+import { HttpClient, HttpHeaders } from '@angular/common/http'; 
+// permite mapear una respuesta de API Rest al tipo de dato que se necesita del lado del cliente
+import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
 @Injectable()
 export class ClienteService {
   urlEndPointCliente: string = 'http://localhost:8081/api/clientes';
-  public httpHeaders: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });//contiene el header content-type
+  public httpHeaders: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   constructor(
     public http: HttpClient,
     public router: Router) { }
@@ -35,13 +40,16 @@ export class ClienteService {
       })
     );
   };
-  create(cliente: Cliente): Observable<any> {
+  create(cliente: Cliente): Observable<Cliente> {
     //Requiere enviar la url del endpoint, el objeto y las httpHeaders necesarias para autenticarse en el servidor
     //Este endpint nos devuelve un json con el en cliente y un mensaje de éxito
-    //por este motivo se retorna un tipo de dato any
-    return this.http.post<any>(this.urlEndPointCliente, cliente, { headers: this.httpHeaders }).pipe(
-      map(response => response as Cliente),
+    //por este motivo se retorna un response de tipo de dato any
+    return this.http.post(this.urlEndPointCliente, cliente, { headers: this.httpHeaders }).pipe(
+      map((response:any) => response.cliente as Cliente),
       catchError(e => {
+        if(e.status==400){
+          return throwError(e);// de observable  
+        }
         swal.fire('Error de servidor al crear', e.error.message, 'error');
         return throwError(e);// de observable
       })
@@ -59,7 +67,7 @@ export class ClienteService {
   };
   delete(id: number): Observable<any> {
     //Requiere enviar la url del endpoint, el objeto y las httpHeaders necesarias para autenticarse en el servidor
-    //Este endpint nos devuelve un json con el en cliente y un mensaje de éxito
+    //Este endpoint nos devuelve un json con el en cliente y un mensaje de éxito
     //por este motivo se retorna un tipo de dato any
     const url:any = `${this.urlEndPointCliente}/${id}`;
     return this.http.delete<any>(url, { headers: this.httpHeaders }).pipe(
