@@ -9,7 +9,7 @@ import { Observable, throwError } from 'rxjs';
 // permite conectarse a las api rest
 import { HttpClient, HttpHeaders } from '@angular/common/http'; 
 // permite mapear una respuesta de API Rest al tipo de dato que se necesita del lado del cliente
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError,tap } from 'rxjs/operators';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { DatePipe, formatDate, registerLocaleData } from '@angular/common';
@@ -20,6 +20,7 @@ export class ClienteService {
   constructor(
     public http: HttpClient,
     public router: Router) { }
+    /* para obtener un listado sin paginacion
   getClientes(): Observable<Cliente[]> {
     //return of(CLIENTES);// retornar lista desde un json estatico de typescript
     //return this.http.get<Cliente[]>(this.urlFindAll);// es necesario convertir la respuesta al tipo del objeto <Cliente[]>
@@ -28,14 +29,37 @@ export class ClienteService {
 
         let clientes = response as Cliente[];
         return clientes.map(cliente =>{
-          cliente.nombre = cliente.nombre.toUpperCase();
+          cliente.email = cliente.email.toLowerCase();
           //utilizando formDate de angular, se puede usar cualquiera de las dos
           //cliente.createdAt = formatDate(cliente.createdAt,'dd-MM-yyyy','en-US');
           //utilizando pipe en la fecha
           //let datePipe = new DatePipe('es');
           //cliente.createdAt = datePipe.transform(cliente.createdAt,'EEEE dd, MMMM yyyy') || '';
+          return cliente; //retorna un arreglo de Clientes el cual puede ser tomado por un tap debajo de esta funcion
+        });//para cambiar los valores internos del array
+      }),
+      tap(response=>{//Response ya es de tipo Cliente[] gracias a la funcion map anterior
+        response.forEach(cliente=>{
+          console.log(cliente);
+        });
+      })
+    );
+  };*/
+  //para obtener un listado con paginacion
+  getClientes(page:number): Observable<any> {
+    //return of(CLIENTES);// retornar lista desde un json estatico de typescript
+    //return this.http.get<Cliente[]>(this.urlFindAll);// es necesario convertir la respuesta al tipo del objeto <Cliente[]>
+    return this.http.get(this.urlEndPointCliente+'/page/'+page).pipe(
+      map((response: any) => {// canvertimos el response a tipo any ya que por defecto es object, lo que impide que almacene todda la respuesta
+         (response.content as Cliente[]).map(cliente =>{
+          cliente.email = cliente.email.toLowerCase();
           return cliente;
         });//para cambiar los valores internos del array
+        return response;
+      }),
+      tap((response: any )=>{//Response ya es de tipo Cliente[] gracias a la funcion map anterior
+        (response.content as Cliente[]).forEach(cliente=>{
+        });
       })
     );
   };

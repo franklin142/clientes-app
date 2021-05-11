@@ -21,9 +21,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let cliente of clientes">
-          <td>{{cliente.nombre+' '+cliente.apellido | uppercase}}</td>
+          <td>{{cliente.nombre}} {{cliente.apellido | uppercase }}</td>
           <td>{{cliente.email}}</td>
-          <td i18n>{{cliente.createdAt|date:"EEEE dd, MMMM yyyy"}}</td>
+          <td i18n>{{cliente.createdAt | date:"EEEE dd, MMMM yyyy"}}</td>
           <td>
             <button type="button" [routerLink]="['/clientes/form',cliente.id]" class="btn btn-primary">Editar</button>
             <button type="button" (click)="[delete(cliente)]" class="btn btn-danger">Eliminar</button>
@@ -32,5 +32,12 @@
       </tbody>
 
     </table>
+    <!--Inyectamos el paginator en el componente hijo paginator-nav donde [paginator] 
+        es el nombre objeto en el hijo y "paginator" es el objeto que estamos
+        heredando desde el padre. es importante el *ngIf="paginator"
+        porque todos los procesos son asincronos y pueda que el componente paginator cargue antes
+        que el componente padre que recibe los datos desde el service
+    -->
+    <paginator-nav *ngIf="paginator" [paginator]="paginator"></paginator-nav>
   </div>
 </div>

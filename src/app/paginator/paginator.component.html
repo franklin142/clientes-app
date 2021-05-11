@@ -1,0 +1,35 @@
+<ul *ngIf="paginas.length>0" class="pagination">
+    <li class="page-item" *ngIf="!paginator.first">
+        <a [routerLink]="['/clientes/page',paginator.number-1]" 
+        class="page-link"
+        >&laquo;</a>
+    </li>
+    <li class="page-item"  [ngClass]="paginator.first?'disabled':''">
+        <a [routerLink]="['/clientes/page',0]" 
+        class="page-link"
+        >Primera</a>
+    </li>
+    <li *ngFor="let pagina of paginas" 
+    class="page-item"  [ngClass]="pagina-1==paginator.number?'active':''">
+        <!-- Evaluamos si la pagina actual es igual al retornado por el servicio-->
+        <!-- Con esto se consigue deshabilitar o dar un estilo diferente a la pagina actual-->
+        <span class="page-link" 
+        *ngIf="pagina-1==paginator.number"
+        
+        >{{pagina}}</span>
+        
+        <a *ngIf="pagina-1!=paginator.number" 
+        [routerLink]="['/clientes/page',pagina-1]" 
+        class="page-link">{{pagina}}</a>
+    </li>
+    <li class="page-item" [ngClass]="paginator.last?'disabled':''">
+        <a [routerLink]="['/clientes/page',paginator.totalPages-1]" 
+        class="page-link"
+        >Última</a>
+    </li>
+    <li class="page-item" *ngIf="!paginator.last">
+        <a [routerLink]="['/clientes/page',paginator.number+1]" 
+        class="page-link"
+        >&raquo;</a>
+    </li>
+</ul>

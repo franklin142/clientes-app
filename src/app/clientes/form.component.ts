@@ -15,7 +15,7 @@ export class FormComponent implements OnInit {
 
   constructor(private clienteService:ClienteService,
     private router:Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute//sirve para poder obtener una variable o ver los cambios de la url
   ) { }
   public cargarCliente():void{
     this.activatedRoute.params.subscribe(params => {
