@@ -16,3 +16,11 @@ Todos los componentes deberian pasar primero por el app.component para poder ser
 </html>
 
 
+para los idiomas con i18n se debe configurar el app.module.ts
+agregar el localeEs
+agregar el metodo registerLocaleData(localeEs,'es'); en el cuerpo del archivo
+ademas se debe agregar al providers la siguiente configuracion
+providers: [ //aqui van los servicios que conecten a api rest externas
+    ClienteService,
+    ----> {provide:LOCALE_ID,useValue:'es'} <------
+  ],

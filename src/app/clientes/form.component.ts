@@ -9,9 +9,10 @@ import  Swal  from 'sweetalert2';
   templateUrl: './form.component.html'
 })
 export class FormComponent implements OnInit {
-  public cliente:Cliente = new Cliente();
-  public titluloForm:string = 'Registrar nuevo Cliente';
+  public cliente: Cliente = new Cliente();
+  public titluloForm: string = 'Registrar nuevo Cliente';
   errors:String[]=[];
+
   constructor(private clienteService:ClienteService,
     private router:Router,
     private activatedRoute: ActivatedRoute

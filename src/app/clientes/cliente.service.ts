@@ -12,7 +12,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
-
+import { DatePipe, formatDate, registerLocaleData } from '@angular/common';
 @Injectable()
 export class ClienteService {
   urlEndPointCliente: string = 'http://localhost:8081/api/clientes';
@@ -24,7 +24,19 @@ export class ClienteService {
     //return of(CLIENTES);// retornar lista desde un json estatico de typescript
     //return this.http.get<Cliente[]>(this.urlFindAll);// es necesario convertir la respuesta al tipo del objeto <Cliente[]>
     return this.http.get(this.urlEndPointCliente).pipe(
-      map(response => response as Cliente[])
+      map(response => {// formateamos los valores desde el observable
+
+        let clientes = response as Cliente[];
+        return clientes.map(cliente =>{
+          cliente.nombre = cliente.nombre.toUpperCase();
+          //utilizando formDate de angular, se puede usar cualquiera de las dos
+          //cliente.createdAt = formatDate(cliente.createdAt,'dd-MM-yyyy','en-US');
+          //utilizando pipe en la fecha
+          //let datePipe = new DatePipe('es');
+          //cliente.createdAt = datePipe.transform(cliente.createdAt,'EEEE dd, MMMM yyyy') || '';
+          return cliente;
+        });//para cambiar los valores internos del array
+      })
     );
   };
   getClienteById(id: number): Observable<Cliente> {
