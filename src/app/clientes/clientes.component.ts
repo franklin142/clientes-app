@@ -4,6 +4,8 @@ import { ClienteService } from './cliente.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import swal from 'sweetalert2';
 import { tap } from 'rxjs/operators';//tap sirve para modificar los datos antes de ser retornados o despues de retornarlos del service
+import { ModalService } from "./detalle/modal.service";
+
 @Component({
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',
@@ -12,9 +14,11 @@ import { tap } from 'rxjs/operators';//tap sirve para modificar los datos antes 
 export class ClientesComponent implements OnInit {
 
   clientes: Cliente[] = [];
+  clienteSeleccionado:Cliente | null = null;
   paginator:any = "";
   constructor(
     private clienteService: ClienteService,
+    private modalSevice:ModalService,
     private router: Router,
     private activatedRoute: ActivatedRoute//sirve para poder obtener una variable o ver los cambios de la url
 
@@ -79,5 +83,9 @@ export class ClientesComponent implements OnInit {
       }
     });
 
+  }
+  abrirModal(cliente:Cliente){
+    this.clienteSeleccionado = cliente;
+    this.modalSevice.openModal();
   }
 }

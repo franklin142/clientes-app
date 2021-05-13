@@ -1,5 +1,5 @@
 
-
+<detalle-cliente *ngIf="clienteSeleccionado" [cliente]="clienteSeleccionado"></detalle-cliente>
 <div class="card text-white bg-secondary mb-3">
   <div class="card-header">Clientes</div>
   <div class="card-body">
@@ -13,6 +13,7 @@
     <table class="table table-bordered table-striped" *ngIf="clientes.length && clientes.length>0">
       <thead>
         <tr>
+          <th>IMG</th>
           <th>Cliente</th>
           <th>Correo</th>
           <th>Fecha de registro</th>
@@ -21,6 +22,24 @@
       </thead>
       <tbody>
         <tr *ngFor="let cliente of clientes">
+          <td>
+            <!--Se usa cuando se quiere abrir el detalle del cliente en una ruta-->
+            <!--button class="btn btn-warning" 
+            [routerLink]="['/clientes/ver',cliente.id]"
+            type="button"
+            >{{cliente.id}}</button-->
+            
+              <img *ngIf="cliente?.foto" src="http://localhost:8081/api/uploads/img/{{cliente?.foto}}"
+                    alt="{{cliente?.foto}}" class="img-thumbnail rounded " 
+                    style="max-width: 60px; cursor: pointer;"
+                    (click)="abrirModal(cliente)"
+                    />
+              <img *ngIf="!cliente?.foto" src="http://localhost:8081/api/static/img/no-user-image.jpg"
+              alt="sin foto" class="img-thumbnail rounded " 
+              style="max-width: 60px; cursor: pointer;"
+              (click)="abrirModal(cliente)"
+              />
+          </td>
           <td>{{cliente.nombre}} {{cliente.apellido | uppercase }}</td>
           <td>{{cliente.email}}</td>
           <td i18n>{{cliente.createdAt | date:"EEEE dd, MMMM yyyy"}}</td>

@@ -6,6 +6,3 @@ html{
   body{
     margin-bottom: 180px;/*hace que el body tenga la separacion del footer para que no se metan los registros por debajo de el*/
   }
-  
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
