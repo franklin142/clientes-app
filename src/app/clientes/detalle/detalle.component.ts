@@ -70,6 +70,7 @@ export class DetalleComponent implements OnInit {
             this.progreso ++;
             const message = response.message || 'Fotografía subida exitosamente';
             Swal.fire('Hecho', message, 'success');
+            this.modalService.notificarUpload.emit(this.cliente); 
           }
 
         });

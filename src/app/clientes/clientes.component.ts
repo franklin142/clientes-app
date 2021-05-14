@@ -3,7 +3,7 @@ import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import swal from 'sweetalert2';
-import { tap } from 'rxjs/operators';//tap sirve para modificar los datos antes de ser retornados o despues de retornarlos del service
+import { map, tap } from 'rxjs/operators';//tap sirve para modificar los datos antes de ser retornados o despues de retornarlos del service
 import { ModalService } from "./detalle/modal.service";
 
 @Component({
@@ -18,8 +18,8 @@ export class ClientesComponent implements OnInit {
   paginator:any = "";
   constructor(
     private clienteService: ClienteService,
-    private modalSevice:ModalService,
-    private router: Router,
+    private modalService:ModalService,
+   // private router: Router, //descomentar esta linea cuando se desee manejar rutas en los links
     private activatedRoute: ActivatedRoute//sirve para poder obtener una variable o ver los cambios de la url
 
   ) {
@@ -62,6 +62,19 @@ export class ClientesComponent implements OnInit {
       );
     }
   );
+  // subscribe() percibe los cambios emitidos en modalService 
+  // mediante el evento get notificarUpload() llamado desde otro compente
+  // el cual es un modal 
+  this.modalService.notificarUpload.subscribe(cliente=>{
+    // recorremos el arreglo de clientes con map() para 
+    // asignarle la nueva foto 
+    this.clientes = this.clientes.map(clienteOriginal=>{
+      if(clienteOriginal.id==cliente.id){
+        clienteOriginal.foto= cliente.foto;
+      }
+      return clienteOriginal;
+    })
+  });
   }
   delete(cliente: Cliente): void {
     swal.fire({
@@ -86,6 +99,6 @@ export class ClientesComponent implements OnInit {
   }
   abrirModal(cliente:Cliente){
     this.clienteSeleccionado = cliente;
-    this.modalSevice.openModal();
+    this.modalService.openModal();
   }
 }
