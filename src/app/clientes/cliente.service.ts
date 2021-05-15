@@ -12,6 +12,7 @@ import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common
 import { map, catchError, tap } from 'rxjs/operators';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { Region } from './region';
 //import { DatePipe, formatDate, registerLocaleData } from '@angular/common';
 @Injectable()
 export class ClienteService {
@@ -122,7 +123,7 @@ getClientes(): Observable<Cliente[]> {
     const req = new HttpRequest('POST', url, form, {
       reportProgress: true
     });
-   
+
     //enviar formData manejando progreso
     return this.http.request(req);
 
@@ -139,5 +140,8 @@ getClientes(): Observable<Cliente[]> {
           return throwError(e);// de observable
         })
       );*/
+  };
+  getRegiones(): Observable<Region[]> {
+    return this.http.get<Region[]>(this.urlEndPointCliente + '/regiones')
   };
 };

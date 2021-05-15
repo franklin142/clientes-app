@@ -82,6 +82,32 @@
         </div>
       </div>
       <div class="form-group row ">
+        <label for="region" class="col-sm-12 col-form-label">Region</label>
+        <div class="col-sm-6 input-group">
+          <!--[compareWith] busca el metodo indicado en las comillas y le pasa dos parametros(objetos)
+              y si la funcion retorna true entonces selecciona el option que tiene el id de la region
+              asosiada al cliente 
+          -->
+          <select 
+          class="form-control" 
+          [(ngModel)]="cliente.region"
+          [compareWith]="compareWith"
+          name="region"
+          >
+          <!--[ngValue]="undefined" es importante para que al validar 
+              los datos nos de el mensaje que no puede ser null. Angular al 
+              detectar undefined envia null y de esta manera el server puede 
+              retornar el mensaje de error y luego mostrarlo al usuario.
+              ir a la programacion del form.component.ts para ver mas detalles
+              sobre el metodo compareWith
+          -->
+          <option [ngValue]="undefined">---Seleccione una región---</option>
+          <!--[ngValue] es capaz de almacenar la instancia completa del objeto seleccionado-->
+            <option *ngFor="let region of regiones" [ngValue]="region">{{region.nombre}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row ">
         <label for="email" class="col-sm-12 col-form-label">Email</label>
         <div class="col-sm-6">
           <input type="email" class="form-control" 
