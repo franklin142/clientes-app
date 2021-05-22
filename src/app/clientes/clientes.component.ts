@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import swal from 'sweetalert2';
 import { map, tap } from 'rxjs/operators';//tap sirve para modificar los datos antes de ser retornados o despues de retornarlos del service
 import { ModalService } from "./detalle/modal.service";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-clientes',
@@ -100,5 +101,6 @@ export class ClientesComponent implements OnInit {
   abrirModal(cliente:Cliente){
     this.clienteSeleccionado = cliente;
     this.modalService.openModal();
+  
   }
 }

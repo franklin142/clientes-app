@@ -7,12 +7,14 @@ import { Observable, throwError } from 'rxjs';
 // es quien permite extraer el resultado de la peticion una vez termine
 //import { of} from 'rxjs/observable/of';
 // permite conectarse a las api rest
-import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
 // permite mapear una respuesta de API Rest al tipo de dato que se necesita del lado del cliente
 import { map, catchError, tap } from 'rxjs/operators';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { Region } from './region';
+import { error } from 'protractor';
+import Swal from 'sweetalert2';
 //import { DatePipe, formatDate, registerLocaleData } from '@angular/common';
 @Injectable()
 export class ClienteService {
@@ -22,7 +24,7 @@ export class ClienteService {
     public http: HttpClient,
     public router: Router) { }
   /* para obtener un listado sin paginacion
-getClientes(): Observable<Cliente[]> {
+  getClientes(): Observable<Cliente[]> {
   //return of(CLIENTES);// retornar lista desde un json estatico de typescript
   //return this.http.get<Cliente[]>(this.urlFindAll);// es necesario convertir la respuesta al tipo del objeto <Cliente[]>
   return this.http.get(this.urlEndPointCliente).pipe(
@@ -84,6 +86,9 @@ getClientes(): Observable<Cliente[]> {
     return this.http.post(this.urlEndPointCliente, cliente, { headers: this.httpHeaders }).pipe(
       map((response: any) => response.cliente as Cliente),
       catchError(e => {
+        if(this.isUnauthorized(e)){
+          return throwError(e);
+        }
         if (e.status == 400) {
           return throwError(e);// de observable  
         }
@@ -97,6 +102,9 @@ getClientes(): Observable<Cliente[]> {
     const url: any = `${this.urlEndPointCliente}/${cliente.id}`;
     return this.http.put<Cliente>(url, cliente, { headers: this.httpHeaders }).pipe(
       catchError(e => {
+        if(this.isUnauthorized(e)){
+          return throwError(e);
+        }
         swal.fire('Error de servidor al actualizar', e.error.message, 'error');
         return throwError(e);// de observable
       })
@@ -109,12 +117,15 @@ getClientes(): Observable<Cliente[]> {
     const url: any = `${this.urlEndPointCliente}/${id}`;
     return this.http.delete<any>(url, { headers: this.httpHeaders }).pipe(
       catchError(e => {
+        if(this.isUnauthorized(e)){
+          return throwError(e);
+        }
         swal.fire('Error de servidor al eliminar', e.error.message, 'error');
         return throwError(e);// de observable
       })
     );
   };
-  uploadFoto(archivo: File, id: number): Observable<HttpEvent<{}>> {
+  uploadFoto(archivo: File, id: number): Observable<HttpEvent<{}>|any> {
     //Requiere enviar la url del endpoint, el objeto y las httpHeaders necesarias para autenticarse en el servidor
     const url: any = `${this.urlEndPointCliente}/upload`;
     let form: FormData = new FormData();
@@ -125,7 +136,12 @@ getClientes(): Observable<Cliente[]> {
     });
 
     //enviar formData manejando progreso
-    return this.http.request(req);
+    return this.http.request(req).pipe(
+      catchError(error=>{
+        this.isUnauthorized(error);
+        return throwError(error);
+      })
+    );
 
     /* 
     //enviar formData sin manejar progreso
@@ -142,6 +158,19 @@ getClientes(): Observable<Cliente[]> {
       );*/
   };
   getRegiones(): Observable<Region[]> {
-    return this.http.get<Region[]>(this.urlEndPointCliente + '/regiones')
+    return this.http.get<Region[]>(this.urlEndPointCliente + '/regiones').pipe(
+      catchError(error=>{
+        this.isUnauthorized(error);
+        return throwError(error);
+      })
+    );
   };
+  isUnauthorized(error:HttpErrorResponse):boolean{
+    if( error.status==401 || error.status==403 ){
+      this.router.navigate(['/login']);
+      Swal.fire("Permisos insuficientes","Hola no estas autorizado para este recurso","warning");
+      return true;
+    }
+    return false;
+  }
 };
