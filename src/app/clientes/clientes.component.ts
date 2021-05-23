@@ -6,6 +6,7 @@ import swal from 'sweetalert2';
 import { map, tap } from 'rxjs/operators';//tap sirve para modificar los datos antes de ser retornados o despues de retornarlos del service
 import { ModalService } from "./detalle/modal.service";
 import Swal from 'sweetalert2';
+import { AuthService } from '../usuarios/auth.service';
 
 @Component({
   selector: 'app-clientes',
@@ -20,6 +21,7 @@ export class ClientesComponent implements OnInit {
   constructor(
     private clienteService: ClienteService,
     private modalService:ModalService,
+    public authService:AuthService,
    // private router: Router, //descomentar esta linea cuando se desee manejar rutas en los links
     private activatedRoute: ActivatedRoute//sirve para poder obtener una variable o ver los cambios de la url
 

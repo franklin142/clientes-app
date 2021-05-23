@@ -4,7 +4,7 @@
   <div class="card-header">Clientes</div>
   <div class="card-body">
     <h5 class="card-title">Lista de clientes</h5>
-    <div class="my-2 text-left">
+    <div class="my-2 text-left" *ngIf="authService.hasRole('ROLE_ADMIN')">
       <button type="button" class="btn btn-rounded btn-primary" [routerLink]="['/clientes/form']">Agregar nuevo Cliente</button>
     </div>
     <div class="alert alert-info" *ngIf="clientes?.length == 0">
@@ -13,16 +13,16 @@
     <table class="table table-bordered table-striped" *ngIf="clientes.length && clientes.length>0">
       <thead>
         <tr>
-          <th>IMG</th>
+          <th *ngIf="authService.hasRole('ROLE_SALES')">IMG</th>
           <th>Cliente</th>
           <th>Correo</th>
           <th>Fecha de registro</th>
-          <th>Acciones</th>
+          <th *ngIf="authService.hasRole('ROLE_ADMIN')">Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let cliente of clientes">
-          <td>
+          <td *ngIf="authService.hasRole('ROLE_SALES')">
             <!--Se usa cuando se quiere abrir el detalle del cliente en una ruta-->
             <!--button class="btn btn-warning" 
             [routerLink]="['/clientes/ver',cliente.id]"
@@ -43,9 +43,13 @@
           <td>{{cliente.nombre}} {{cliente.apellido | uppercase }}</td>
           <td>{{cliente.email}}</td>
           <td i18n>{{cliente.createdAt | date:"EEEE dd, MMMM yyyy"}}</td>
-          <td>
-            <button type="button" [routerLink]="['/clientes/form',cliente.id]" class="btn btn-primary">Editar</button>
-            <button type="button" (click)="[delete(cliente)]" class="btn btn-danger">Eliminar</button>
+          <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+            <button type="button" 
+            [routerLink]="['/clientes/form',cliente.id]"
+             class="btn btn-primary">Editar</button>
+            <button type="button" 
+            (click)="[delete(cliente)]" 
+            class="btn btn-danger">Eliminar</button>
           </td>
         </tr>
       </tbody>

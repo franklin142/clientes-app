@@ -3,24 +3,53 @@
         {{titulo}}
     </div>
     <div class="card-body">
-        <form  method="post">
+        <form method="post" #loginForm="ngForm">
             <div class="form-group col-sm-6">
-                <input type="text" name="username" id="username" 
-                class="form-control"
-                placeholder="Nombre de usuario"
-                autofocus
-                required>
+                <input type="text" name="username" id="username" class="form-control" #username="ngModel"
+                    placeholder="Nombre de usuario" [(ngModel)]="usuario.username" autofocus required>
+                <div class="alert alert-danger" *ngIf="username.invalid && (username.touched || username.dirty)">
+                    <!--Aqui van todos los mensajes de validacion. para este ejemplo se toma el campo #username 
+                        el cual es evaluado mediante ngif para su validacion.
+                        Se muestra la validacion en los dos contextos los cuales son nombre.touched y nombre.dirty
+                        dirty: a medida que escribimos muestra el error
+                        touches: cuando salimos o entramos al campo
+                    -->
+                    <div *ngIf="username.errors && username.errors.required">
+                        Falta el nombre de usuario
+                    </div>
+                    <div *ngIf="username.errors && username.errors.minlength">
+                        El nombre de usuario debe tener al menos 4 caracteres
+                    </div>
+                    <div *ngIf="username.errors && username.errors.maxlength">
+                        El nombre de usuario debe tener un maximo de 50 caracteres
+                    </div>
+                </div>
             </div>
             <div class="form-group col-sm-6">
-                <input type="password" name="password" id="password" 
-                class="form-control"
-                placeholder="constraseña de usuario"
-                required>
+                <input type="password" name="password" id="password" class="form-control"
+                    placeholder="constraseña de usuario" #password="ngModel" [(ngModel)]="usuario.password" required>
+                <div class="alert alert-danger" *ngIf="password.invalid && (password.touched || password.dirty)">
+                    <!--Aqui van todos los mensajes de validacion. para este ejemplo se toma el campo #password 
+                        el cual es evaluado mediante ngif para su validacion.
+                        Se muestra la validacion en los dos contextos los cuales son password.touched y password.dirty
+                        dirty: a medida que escribimos muestra el error
+                        touches: cuando salimos o entramos al campo
+                    -->
+                    <div *ngIf="password.errors && password.errors.required">
+                        Falta la constraseña
+                    </div>
+                    <div *ngIf="password.errors && password.errors.minlength">
+                        la constraseña debe tener almenos 3 caracteres
+                    </div>
+                    <div *ngIf="password.errors && password.errors.maxlength">
+                        La constraseña debe tener un maximo de 50 caracteres
+                    </div>
+                </div>
             </div>
             <div class="form-group col-sm-6">
-                <input type="submit"  
-                class="btn btn-lg btn-primary btn-block"
-                value="Iniciar Sesión">
+                <input type="submit" (click)="login()"
+                class="btn btn-lg btn-primary btn-block" [disabled]="loginForm.invalid"
+                    value="Iniciar Sesión">
             </div>
         </form>
     </div>

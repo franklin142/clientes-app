@@ -11,7 +11,7 @@ import { FormComponent } from './clientes/form.component'; // permite la conexi�
 import { FormsModule } from '@angular/forms';
 
 import { RouterModule, Routes } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 // elementos necesarios para que funcionen las animaciones de material
@@ -22,17 +22,25 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { DetalleComponent } from './clientes/detalle/detalle.component';
 import { LoginComponent } from './usuarios/login.component';
-
+import { AuthGuard } from './usuarios/guards/auth.guard';
+import { RoleGuard } from './usuarios/guards/role.guard';
+import { TokenInterceptor } from "./usuarios/interceptors/token.interceptor";
+import { AuthInterceptor } from './usuarios/interceptors/auth.interceptor';
 registerLocaleData(localeEs, 'es');
 const routes: Routes = [
-  { path: '', redirectTo: '/clientes', pathMatch: 'full' },
+  { path: '', redirectTo: '/clientes', pathMatch: 'full'},
   { path: 'clientes', component: ClientesComponent },
   { path: 'clientes/page/:page', component: ClientesComponent },
   { path: 'directivas', component: DirectivaComponent },
-  { path: 'clientes/form', component: FormComponent },
-  { path: 'clientes/form/:id', component: FormComponent },
+  { path: 'clientes/form', component: FormComponent, 
+  //los guards se ejecutan en orden pero aunque uno devuelva false,
+  // los demás siempre se ejecutarán. Si hay una validación en el primero,
+  // tambien debe hacerse en el segundo 
+      canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_ADMIN'}},
+  { path: 'clientes/form/:id', component: FormComponent, 
+      canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_ADMIN'}},
   { path: 'login', component: LoginComponent }
-  // para manejar la foto desde una ruta
+  // para manejar la foto y detalle de cliente desde una ruta
   // { path: 'clientes/ver/:id', component: DetalleComponent }
 ];
 @NgModule({
@@ -59,6 +67,9 @@ const routes: Routes = [
     ClienteService,
     { provide: LOCALE_ID, useValue: 'es' }, // para configurar el idioma general
     { provide: MAT_DATE_LOCALE, useValue: 'es' }, // Para configurar el idioma de la fecha de material
+    { provide: HTTP_INTERCEPTORS,useClass:TokenInterceptor, multi:true }, //para agregar el token al header http
+    { provide: HTTP_INTERCEPTORS,useClass:AuthInterceptor, multi:true } //para agregar el token al header http
+
   ],
   bootstrap: [AppComponent]
 })

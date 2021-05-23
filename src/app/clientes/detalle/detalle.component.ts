@@ -2,6 +2,7 @@ import { HttpEventType, HttpProgressEvent } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { bufferToggle } from 'rxjs/operators';
+import { AuthService } from 'src/app/usuarios/auth.service';
 import Swal from 'sweetalert2';
 import { Cliente } from '../cliente';
 import { ClienteService } from '../cliente.service';
@@ -20,7 +21,8 @@ export class DetalleComponent implements OnInit {
   constructor(
     public clienteService: ClienteService, //para conectar con los datos del servicio
     //private activatedRoute: ActivatedRoute //Para detectar cuando cambia el id del usuario en la url
-    public modalService:ModalService
+    public modalService:ModalService,
+    public authService:AuthService
 
   ) { }
 

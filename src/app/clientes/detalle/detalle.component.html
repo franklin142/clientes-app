@@ -30,13 +30,13 @@
                     Region: {{cliente.region.nombre}}
                   </li>
                 </ul>
-                <div class="input-group">
+                <div class="input-group" *ngIf="authService.hasRole('ROLE_ADMIN')">
                   <div class="custom-file">
                     <input type="file" class="custom-file-input" (change)="seleccionarFoto($event.target)" id="archivo"
                       aria-describedby="btn-archivo">
                     <label class="custom-file-label" for="archivo">Selecciona un archivo</label>
                   </div>
-                  <div class="input-group-append">
+                  <div class="input-group-append" >
                     <button class="btn btn-outline-secondary" (click)="subirFoto()" type="button"
                       [disabled]="!this.foto" id="btn-archivo">Subir</button>
                   </div>
