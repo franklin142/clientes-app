@@ -168,6 +168,7 @@ export class ClienteService {
 
     const req = new HttpRequest('POST', url, form, {
       reportProgress: true
+      //Util cuando no se maneja interceptor y se quiere enviar el token a travez del formData 
       //,headers: headers
     });
 
