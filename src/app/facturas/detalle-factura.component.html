@@ -1,0 +1,71 @@
+<div class="car-bg-light">
+<div class="card-header">
+    {{titulo}}: {{factura.descripcion}} 
+</div>
+<div class="card-body">
+    <h4 class="card-title">
+        <a class="btn btn-light btn-xs" routerLink="/clientes">Volver</a>
+    </h4>
+    <ul class="list-group my-2" *ngIf="factura.cliente">
+        <li class="list-group-item list-group-item-primary">
+        Datos del Cliente
+        </li>
+        <li class="list-group-item">
+            Nombre: {{factura.cliente.nombre}}
+        </li>
+        <li class="list-group-item">
+            Apellido: {{factura.cliente.apellido}}
+        </li>
+    </ul>
+    <ul class="list-group my-2" *ngIf="factura.cliente">
+        <li class="list-group-item list-group-item-primary">
+            Datos de factura         
+        </li>
+        <li class="list-group-item">
+            Folio: {{factura.id}}
+        </li>
+        <li class="list-group-item">
+            <!-- para tener configurado el español y mostrar
+                 cifras en formato inglés se agrega esto-->
+            Total: {{factura.total | number:'1.2-2':'en-US' }}
+        </li>
+        <li class="list-group-item">
+            <!-- para tener configurado el español y mostrar
+                 cifras en formato inglés se agrega esto-->
+            Fecha: {{factura.createdAt | date: "dd/MM/yyyy"}}
+        </li>
+    </ul>
+    <table *ngIf="factura.items" 
+    class="table table-striped table-bordered table-hover my3">
+        <thead>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Importe</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of factura.items">
+                <td>{{item.producto.nombre}}</td>
+                <td>{{item.producto.precio | currency:'USD' : 'symbol' : '1.2-2' : 'en-US'}}</td>
+                <td>{{item.cantidad}}</td>
+                <td>{{item.importe | currency:'USD' : 'symbol' : '1.2-2' : 'en-US'}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="card border-info mt-4">
+        <div class="card-header">Observaciones</div>
+        <div class="card-body">
+            <p *ngIf="factura.observacion else sinObservacion">
+                {{factura.observacion}}
+            </p>
+            <ng-template  #sinObservacion>
+                <div class="badge badge-warning">
+                        Nada que mostrar
+
+                </div>
+            
+            </ng-template>
+      </div>
+    </div>
+</div>
+</div>

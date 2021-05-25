@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { LOCALE_ID, DEFAULT_CURRENCY_CODE, NgModule } from '@angular/core';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { DirectivaComponent } from './directiva/directiva.component';
@@ -26,6 +26,7 @@ import { AuthGuard } from './usuarios/guards/auth.guard';
 import { RoleGuard } from './usuarios/guards/role.guard';
 import { TokenInterceptor } from "./usuarios/interceptors/token.interceptor";
 import { AuthInterceptor } from './usuarios/interceptors/auth.interceptor';
+import { DetalleFacturaComponent } from './facturas/detalle-factura.component';
 registerLocaleData(localeEs, 'es');
 const routes: Routes = [
   { path: '', redirectTo: '/clientes', pathMatch: 'full'},
@@ -39,9 +40,11 @@ const routes: Routes = [
       canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_ADMIN'}},
   { path: 'clientes/form/:id', component: FormComponent, 
       canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_ADMIN'}},
-  { path: 'login', component: LoginComponent }
+  { path: 'login', component: LoginComponent },
   // para manejar la foto y detalle de cliente desde una ruta
   // { path: 'clientes/ver/:id', component: DetalleComponent }
+  {path: 'facturas/:id', component: DetalleFacturaComponent,
+      canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_SALES'}}
 ];
 @NgModule({
   declarations: [// aqui van todas las clases y componentes que pueden ser utilizados en app.component.html y app.component.ts
@@ -53,7 +56,8 @@ const routes: Routes = [
     FormComponent,
     PaginatorComponent,
     DetalleComponent,
-    LoginComponent
+    LoginComponent,
+    DetalleFacturaComponent
   ],
   imports: [
     BrowserModule,
@@ -66,9 +70,10 @@ const routes: Routes = [
   providers: [ // aqui van los servicios que conecten a api rest externas
     ClienteService,
     { provide: LOCALE_ID, useValue: 'es' }, // para configurar el idioma general
+    { provide: DEFAULT_CURRENCY_CODE, useValue: 'USD'}, // configura la moneda por defecto del sistema
     { provide: MAT_DATE_LOCALE, useValue: 'es' }, // Para configurar el idioma de la fecha de material
-    { provide: HTTP_INTERCEPTORS,useClass:TokenInterceptor, multi:true }, //para agregar el token al header http
-    { provide: HTTP_INTERCEPTORS,useClass:AuthInterceptor, multi:true } //para agregar el token al header http
+    { provide: HTTP_INTERCEPTORS,useClass:TokenInterceptor, multi:true }, // para agregar el token al header http antes de enviar cualquierrequest
+    { provide: HTTP_INTERCEPTORS,useClass:AuthInterceptor, multi:true } // para procesar errores antes de que lleguen a los services
 
   ],
   bootstrap: [AppComponent]
