@@ -77,7 +77,8 @@
                     <td>
                       <button class="btn btn-primary btn-sm"
                       [routerLink]="['/facturas/',factura.id]">ver</button>&nbsp;
-                      <button class="btn btn-danger btn-sm">Eliminar</button>
+                      <button class="btn btn-danger btn-sm"
+                      (click)="eliminarFactura(factura)">Eliminar</button>
                     </td>
                   </tr>
                 </tbody>
