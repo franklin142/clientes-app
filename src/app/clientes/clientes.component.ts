@@ -19,8 +19,8 @@ export class ClientesComponent implements OnInit {
   clienteSeleccionado:Cliente | null = null;
   paginator:any = "";
   constructor(
-    private clienteService: ClienteService,
-    private modalService:ModalService,
+    public clienteService: ClienteService,
+    public modalService:ModalService,
     public authService:AuthService,
    // private router: Router, //descomentar esta linea cuando se desee manejar rutas en los links
     private activatedRoute: ActivatedRoute//sirve para poder obtener una variable o ver los cambios de la url

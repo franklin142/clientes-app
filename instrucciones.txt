@@ -24,3 +24,97 @@ providers: [ //aqui van los servicios que conecten a api rest externas
     ClienteService,
     ----> {provide:LOCALE_ID,useValue:'es'} <------
   ],
+
+Si se llegan a eliminar los archivos mvnw, mvnw.cmd y .mvn .... Se tendra que crear un proyecto nuevo 
+solo para copiar estos archivos los cuales son necesarios para la configuracion de maven.
+
+para generar el jar desplegable en produccion se necesita ejecutar el comando
+
+./mvnw clean package en linux/mac
+
+                O
+
+./mvnw.cmd clean package en windows
+
+Luego para desplegar necesitamos tener unicamente JAVA instalado en la maquina
+
+java -jar /ruta_donde_del_archivo.jar
+
+//////////////////////////////////////////////////////
+//                APACHE2 linux                     //
+/////////////////////////////////////////////////////
+
+Para desplegar la app angular en apache se necesita ver mas en https://angular.io/guide/deployment
+
+en la carpeta dist generada con el comando ng build --prod agregar el archivo .htaccess
+con el siguiente contenido
+# REQUEST_FILENAME sirve para poder ejecutar un refresh sin generar un 404
+
+RewriteEngine On
+# If an existing asset or directory is requested go to it as it is
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# If the requested resource doesn't exist, use index.html
+RewriteRule ^ /clientes-app/index.html
+
+Luego ir a index.html de esta misma carpeta generada por el comando ng build --prod
+y cambiamos el contenido de la eiqueta <base href="/"> por <base href="/clientes-app/">
+
+Pasos para instalar apache httpd con apt-get
+sudo apt-get install apache2
+
+configurar el puerto para que no choque con los demás servidores activos
+
+copiar el modulo de reescritura para poder reescribir rutas al navegar en la pagina SPA
+cp /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/
+
+dentro del archivo de apache2.conf Cambiar AllowOverride 
+<Directory /var/www/>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+</Directory>
+
+por ultimo copiar los archivos del dist dentro del servidor apache2
+
+//////////////////////////////////////////////////////
+//                NODEJS EXPRESS linux              //
+/////////////////////////////////////////////////////
+moverse a la carpeta dist
+cd dist
+
+ejecutar npm init
+ unicamente cambiar el entry point a server.js
+instalar express en la raiz de dist 
+npm i express --save
+
+cambiar el name del package.json a clientes-app
+{
+  "name": "clientes-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
+crear el archivo server.js
+con el siguiente contenido
+
+  let express = require('express');
+  let path = require('path');
+  let app = express();
+  let port = 81;
+
+  app.use(express.static('clientes-app'));
+  app.get('*',(req,res,next)=>{
+      res.sendFile(path.resolve('clientes-app/index.html'))
+  });
+  app.listen(port,()=>{
+      console.log('escuchando en el puerto '+port)
+  });
