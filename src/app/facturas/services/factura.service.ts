@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
 import { Observable, throwError } from 'rxjs';
-import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { AuthService } from '../../usuarios/auth.service';
 import { Factura } from '../models/factura';
 import { Producto } from '../models/producto';
 
@@ -53,5 +52,8 @@ export class FacturaService {
   filtarProductos(nombre:string):Observable<Producto[]>{
     const url = `${this.urlEndPointFacturas}/filtrar-productos/${nombre}`;
     return this.http.get<Producto[]>(url);
+  }
+  createFactura(factura:Factura): Observable<Factura> {
+    return this.http.post<Factura>(this.urlEndPointFacturas, factura);
   }
 }

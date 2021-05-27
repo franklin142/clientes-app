@@ -9,5 +9,10 @@ export class Factura {
     createdAt!: Date;
     items: Array<ItemFactura> = [];
     cliente!:Cliente;
+    getTotal():number{
+        this.total =0;
+        this.items.forEach(item=>this.total +=item.getImporte());
+        return this.total;
+    }
 }
 

@@ -5,6 +5,7 @@ import { ClienteService} from './cliente.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import  Swal  from 'sweetalert2';
 import { Region } from './region';
+import { Factura } from '../facturas/models/factura';
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html'
@@ -37,7 +38,6 @@ export class FormComponent implements OnInit {
     });
   }
   public create():void {
-    console.log(this.cliente);
     this.clienteService.create(this.cliente).subscribe(
          response => {
            this.router.navigate(['/clientes']);
@@ -50,7 +50,9 @@ export class FormComponent implements OnInit {
     );
   }
   public update():void {
-    console.log(this.cliente);
+    // Importante establecer a coleccion vacia todas las referencias a otras
+    // clases para evitar que spring las intente insertar nuevamente en el backend
+    this.cliente.facturas = [];
     this.clienteService.update(this.cliente).subscribe(
          response => {
            this.router.navigate(['/clientes']);
