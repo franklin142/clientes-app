@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 import { ClienteService } from '../clientes/cliente.service';
 import { Factura } from './models/factura';
 import { ItemFactura } from './models/item-factura';
@@ -23,7 +24,8 @@ export class FacturasComponent implements OnInit {
   constructor(
     public clienteService:ClienteService,
     public facturaService:FacturaService,
-    public activatedRoute:ActivatedRoute
+    public activatedRoute:ActivatedRoute,
+    public router:Router
   ) { }
 
   ngOnInit(): void {
@@ -55,18 +57,20 @@ export class FacturasComponent implements OnInit {
     return producto ? producto.nombre:'';
   }
   seleccionarProducto(event:MatAutocompleteSelectedEvent){
-    let itemFactura = new ItemFactura();
     let productoSelected = event.option.value as Producto;
-    
-    console.log(productoSelected);
-
-    itemFactura.producto = productoSelected;
-
-    this.factura.items.push(itemFactura);
+    if(this.existeItem(productoSelected.id)){
+      this.incrementaCantidad(productoSelected.id, 1);
+    }else{
+      let itemFactura = new ItemFactura();
+      itemFactura.producto = productoSelected;
+      this.factura.items.push(itemFactura);
+    }
+    // limpiamos el texto del control autocomplete 
     this.autoComplete.setValue('');
 
     // Establecemos el foco en el control de seleccion de producto
     event.option.focus();
+
     // Deseleccionamos el producto para poder volver a seleccionar otro
     event.option.deselect();
   }
@@ -85,5 +89,41 @@ export class FacturasComponent implements OnInit {
       
       return item;
     }); 
+  }
+  existeItem(id:number):boolean{
+    let existe =false;
+    this.factura.items.forEach(item =>{
+      if(id== item.producto.id){
+        return existe = true;
+      }
+      return false;
+    })
+    return existe;
+  }
+  incrementaCantidad(id:number,cantidad:number):void{
+    this.factura.items.forEach(item =>{
+      if(id== item.producto.id){
+        ++ item.cantidad;
+      }
+    })
+  }
+  createFactura(facturaForm:NgForm):void{
+    // caso de querer manejar las validaciones desde la funcion sin 
+    // deshabilitar el boton de guardar, enviar hasta la funcion
+    // de subtmit en objeto ngForm para evaluar sus variables
+    
+    if(this.factura.items.length==0){
+      this.autoComplete.setErrors({'invalid':true});
+    }
+    if(facturaForm.form.valid && this.factura.items.length>0){
+      this.facturaService.createFactura(this.factura).subscribe(result=>{
+        this.router.navigate(['/clientes/page/0']);
+        Swal.fire('Hecho','Factura registrada exitosamente','success');
+      });
+    }else{
+      Swal.fire('Alerta','Debe agregar al menos un detalle a la factura','warning');
+    }
+    console.log('por aqui');
+    
   }
 }
