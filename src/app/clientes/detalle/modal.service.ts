@@ -1,5 +1,4 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { AuthService } from 'src/app/usuarios/auth.service';
 
 @Injectable({
   providedIn: 'root'

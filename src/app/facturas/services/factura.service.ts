@@ -6,12 +6,13 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Factura } from '../models/factura';
 import { Producto } from '../models/producto';
+import { URL_BACKEND } from 'src/app/config/config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FacturaService {
-  urlEndPointFacturas: string = 'http://localhost:8081/api/facturas';
+  urlEndPointFacturas: string = URL_BACKEND+'/api/facturas';
   constructor(
     private http:HttpClient,
     private router:Router

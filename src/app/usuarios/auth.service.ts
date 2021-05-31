@@ -1,13 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { URL_BACKEND } from '../config/config';
 import { Usuario } from './usuario';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  url: string = 'http://localhost:8081/oauth/token';
+  url: string = URL_BACKEND+'/oauth/token';
  // Son private y sirven para poder generar metodos public get 
   private _usuario: Usuario = new Usuario();
   private _token: string ='';

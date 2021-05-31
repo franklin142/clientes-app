@@ -14,10 +14,11 @@ import { Router } from '@angular/router';
 import { Region } from './region';
 import Swal from 'sweetalert2';
 import { AuthService } from '../usuarios/auth.service';
+import { URL_BACKEND } from '../config/config';
 //import { DatePipe, formatDate, registerLocaleData } from '@angular/common';
 @Injectable()
 export class ClienteService {
-  urlEndPointCliente: string = 'http://localhost:8081/api/clientes';
+  urlEndPointCliente: string = URL_BACKEND+'/api/clientes';
   /*Para enviar el token en el header sin usar interceptor*/
   //public httpHeaders: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   constructor(

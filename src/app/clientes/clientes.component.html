@@ -29,12 +29,12 @@
             type="button"
             >{{cliente.id}}</button-->
             
-              <img *ngIf="cliente?.foto" src="http://localhost:8081/api/uploads/img/{{cliente?.foto}}"
+              <img *ngIf="cliente?.foto" src="{{urlBackend}}/api/uploads/img/{{cliente?.foto}}"
                     alt="{{cliente?.foto}}" class="img-thumbnail rounded " 
                     style="max-width: 60px; cursor: pointer;"
                     (click)="abrirModal(cliente)"
                     />
-              <img *ngIf="!cliente?.foto" src="http://localhost:8081/api/static/img/no-user-image.jpg"
+              <img *ngIf="!cliente?.foto" src="{{urlBackend}}/api/static/img/no-user-image.jpg"
               alt="sin foto" class="img-thumbnail rounded " 
               style="max-width: 60px; cursor: pointer;"
               (click)="abrirModal(cliente)"

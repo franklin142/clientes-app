@@ -1,7 +1,6 @@
-import { HttpEventType, HttpProgressEvent } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { bufferToggle } from 'rxjs/operators';
+import { HttpEventType } from '@angular/common/http';
+import { Component, Input, OnInit,  } from '@angular/core';
+import { URL_BACKEND } from 'src/app/config/config';
 import { Factura } from 'src/app/facturas/models/factura';
 import { FacturaService } from 'src/app/facturas/services/factura.service';
 import { AuthService } from 'src/app/usuarios/auth.service';
@@ -19,6 +18,7 @@ export class DetalleComponent implements OnInit {
   titluloForm: String = "Actualizar foto";
   foto!: File | null;
   progreso: number = 0;
+  urlBackend:string = URL_BACKEND;
 
   constructor(
     public clienteService: ClienteService, //para conectar con los datos del servicio

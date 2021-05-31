@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import swal from 'sweetalert2';
 import { map, tap } from 'rxjs/operators';//tap sirve para modificar los datos antes de ser retornados o despues de retornarlos del service
 import { ModalService } from "./detalle/modal.service";
 import Swal from 'sweetalert2';
 import { AuthService } from '../usuarios/auth.service';
+import { URL_BACKEND } from '../config/config';
 
 @Component({
   selector: 'app-clientes',
@@ -14,7 +14,7 @@ import { AuthService } from '../usuarios/auth.service';
   styleUrls: ['./clientes.component.css']
 })
 export class ClientesComponent implements OnInit {
-
+  urlBackend:string = URL_BACKEND;
   clientes: Cliente[] = [];
   clienteSeleccionado:Cliente | null = null;
   paginator:any = "";
@@ -80,7 +80,7 @@ export class ClientesComponent implements OnInit {
   });
   }
   delete(cliente: Cliente): void {
-    swal.fire({
+    Swal.fire({
       title: 'Confirmar',
       text: `Esta seguro que desea eliminar el cliente ${cliente.nombre} ${cliente.apellido}?`,
       showConfirmButton: true,
@@ -93,7 +93,7 @@ export class ClientesComponent implements OnInit {
           response => {
             //  this.router.navigate(['/clientes']);
             this.clientes = this.clientes.filter(a => a != cliente);
-            swal.fire('Operación realizada', `Cliente ${cliente.nombre} eliminado correctamente`, 'success');
+            Swal.fire('Operación realizada', `Cliente ${cliente.nombre} eliminado correctamente`, 'success');
           }
         );
       }

@@ -50,7 +50,7 @@
               </div>
               <div class="col-sm">
                 <!--Primero evaluamos que el cliente exista y luego que exista la foto-->
-                <img *ngIf="cliente?.foto" src="http://localhost:8081/api/uploads/img/{{cliente?.foto}}"
+                <img *ngIf="cliente?.foto" src="{{urlBackend}}/api/uploads/img/{{cliente?.foto}}"
                   alt="{{cliente?.foto}}" class="img-thumbnail rounded" />
                   <p *ngIf="this.foto?.name"><strong>Foto nueva:</strong> {{this.foto?.name}}</p>
               </div>
@@ -91,7 +91,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
+          <button type="button" class="btn btn-secondary" 
+          data-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
         </div>
       </div>
     </div>
